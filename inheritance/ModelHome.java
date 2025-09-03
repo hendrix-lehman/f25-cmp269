@@ -1,4 +1,18 @@
 abstract class ModelHome {
+
+  private String modelName;
+
+  // constructor
+  public ModelHome(String modelName) {
+    this.modelName = modelName;
+    System.out.println("ModelHome constructor called. Model name: " + modelName);
+  }
+
+  // getter
+  public String getModelName() {
+    return modelName;
+  }
+
   // abstract class can have abstract methods (without body) and concrete methods (with body)
   abstract void showModelDetails(); // abstract method
 

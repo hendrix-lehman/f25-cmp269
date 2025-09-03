@@ -6,13 +6,15 @@ class House extends ModelHome {
 
   // default constructor
   public House() {
-    this.color = "blue";
-    this.rooms = 3;
-    this.hasGarage = false;
+    super("Default Model"); // call to parent class constructor
+     this.color = "blue";
+     this.rooms = 3;
+     this.hasGarage = false;
   }
 
   // overloaded constructor
   public House(String color, int rooms, boolean hasGarage) {
+    super("Default Model"); // call to parent class constructor
     this.color = color;
     this.rooms = rooms;
     this.hasGarage = hasGarage;
@@ -55,6 +57,11 @@ class House extends ModelHome {
     System.out.println("Number of rooms: " + rooms);
     System.out.println("Has garage: " + hasGarage);
   }
+
+  // @Override
+  // public void displayModelInfo() {
+    // System.out.println("From Child class. This is a house model.");
+  // }
 
   // implement abstract method from ModelHome
   @Override

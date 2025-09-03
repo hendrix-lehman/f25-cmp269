@@ -13,6 +13,8 @@ class App {
 
     House anotherHouse = new House("red", 4, true); // creates another instance of House using overloaded constructor
 
+    anotherHouse.displayModelInfo(); // calls the displayModelInfo method on the anotherHouse object
+
     // control flow using if-else
     if (anotherHouse.hasGarage()) {
       System.out.println("This house has a garage.");
