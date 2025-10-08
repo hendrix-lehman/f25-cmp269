@@ -87,7 +87,6 @@ class ChatServer {
     }
   }
 
-
   public static void main(String[] args) {
 
     System.out.println("The chat server is running. Awaiting connections...");
