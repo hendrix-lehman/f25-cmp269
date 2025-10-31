@@ -8,6 +8,8 @@ java {
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
+
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 group = "com.example"
@@ -25,4 +27,9 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization)
+
+    implementation("com.google.zxing:core:3.5.2")
 }
