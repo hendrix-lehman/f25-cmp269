@@ -49,7 +49,7 @@ fun Application.configureRouting() {
         call.respond(response)
     }
 
-    get("/qr") {
+    get("/qr-json") {
       val data = call.request.queryParameters["data"] ?: "https://ktor.io"
 
       val bitMatrix = MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 200, 200)
