@@ -12,3 +12,37 @@ class AppTest {
         assertNotNull(classUnderTest.greeting, "app should have a greeting")
     }
 }
+
+// Conceptual Test File: UserValidatorTest.kt
+class UserValidatorTest : FunSpec({
+    
+    // --- ARRANGE (Step 1: Set up Mockito and SUT) ---
+    // Mockito creates a fake version of the repository
+    val mockRepository = /* Mockito.mock(UserRepository::class.java) */
+    val validator = UserValidator(mockRepository)
+
+    test("Validator should fail if username is too short") {
+        // --- ACT ---
+        val result = validator.isValid("josh")
+        
+        // --- ASSERT (Mockito Verification) ---
+        // Ensures the mock's 'exists' method was NOT called, 
+        // as the test failed early due to the length check.
+        // This confirms the test only checked the SUT's internal rule.
+        // Mockito.verify(mockRepository, never()).exists(any())
+    }
+
+    test("Validator should fail if username already exists") {
+        // --- ARRANGE (Step 2: Stubbing the Mock) ---
+        // We pre-program the mock to pretend the user already exists in the database.
+        // Mockito.`when`(mockRepository.exists("validuser")).thenReturn(true)
+        
+        // --- ACT ---
+        val result = validator.isValid("validuser")
+        
+        // --- ASSERT (Mockito Verification) ---
+        // Ensures that the 'exists' method was called exactly once with the correct username.
+        // Mockito.verify(mockRepository, times(1)).exists("validuser")
+    }
+})
+
