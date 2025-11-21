@@ -7,6 +7,8 @@
 # close() closes the file, if you use 'with' statement, it is closed automatically. Prefer using 'with' statement.
 import csv
 
+import pandas as pd
+
 def write_to_file_unsafe():
     file = open("data.txt", "w")  # Open a file in write mode
     try:
@@ -50,7 +52,14 @@ def main():
     # write_to_file_unsafe()
     # write_to_file_safe()
     # write_to_file_safe_with_error_handling()
-    read_from_file_safe_with_error_handling()
+    # read_from_file_safe_with_error_handling()
+
+    # Using pandas to read CSV file
+    try:
+        df = pd.read_csv("nvda_us_d.csv")
+        print(df)  # Print the first few rows of the DataFrame
+    except Exception as e:
+        print(f"Error reading CSV file with pandas: {e}")
 
 if __name__ == "__main__":
     main()
