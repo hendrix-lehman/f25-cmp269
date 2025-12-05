@@ -11,7 +11,7 @@ import pandas as pd
 # Configuration to get data from Alpha Vantage API
 API_BASE_URL = "https://www.alphavantage.co/query"
 # API_KEY = "demo"  # Replace with your actual API key
-API_KEY = "N2JO6YTQZSNAECNO"  # Replace with your actual API key
+API_KEY = "demo"  # Replace with your actual API key
 
 def fetch_stock_price(symbol: str, function: str = 'GLOBAL_QUOTE') -> Dict[str, Any] | None:
     # 1. Construct the request URL with parameters
