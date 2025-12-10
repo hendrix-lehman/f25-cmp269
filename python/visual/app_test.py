@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 from unittest.mock import patch, Mock
 from requests.exceptions import RequestException
+import json
 
 from app import (
     fetch_stock_price,
@@ -53,6 +54,58 @@ DAILY_TIME_SERIES_DATA = {
     }
 }
 
+class MockResponse:
+    def __init__(self, json_data, status_code=200):
+        self._json_data = json_data
+        self.status_code = status_code
+        self.raise_for_status_called = False
+        self.text = json.dumps(json_data)
+
+    def json(self):
+        return self._json_data
+
+    def raise_for_status(self):
+        self.raise_for_status_called = True
+        if self.status_code != 200:
+            raise RequestException(f"HTTP {self.status_code} Error")
+
+@patch('app.requests.get')
+def test_fetch_stock_price_success(mock_get):
+    mock_get.return_value = MockResponse(
+        json_data= {
+            "Global Quote": {'01. symbol': 'TEST', '05. price': '123.45'},
+        },
+        status_code=200
+    ) 
+
+    result = fetch_stock_price('TEST')
+
+    assert result is not None, "Result should not be None on successful fetch"
+    # assert "Meta Data" in result, "Result should contain 'Meta Data'"
+    assert result["Global Quote"]['01. symbol'] == 'TEST', "Symbol should match the requested symbol"
+    assert result["Global Quote"]['05. price'] == '123.45', "Price should match the mocked price"
+
+    mock_get.assert_called_once()
+
+@patch('app.requests.get')
+def test_fetch_stock_price_api_error(mock_get):
+    mock_get.return_value = MockResponse(
+        json_data={"Error Message": "Invalid API call."},
+        status_code=200
+    )
+
+    result = fetch_stock_price('INVALID')
+
+    assert result is None, "Result should be None when API returns an error message"
+    mock_get.assert_called_once()
+
+@patch('app.requests.get', side_effect=RequestException("Network error"))
+def test_fetch_stock_price_network_error(mock_get):
+    result = fetch_stock_price('TEST')
+
+    assert result is None, "Result should be None when a network error occurs"
+    mock_get.assert_called_once()
+
 @pytest.fixture(scope="module")
 def processed_df():
     df = process_time_series_data(DAILY_TIME_SERIES_DATA)
@@ -89,12 +142,12 @@ def test_process_time_series_data_missing_key():
     assert result is None, "Function should return None for incomplete data"
 
 def test_process_time_series_data_empty():
-    incomplete_data = {
+    empty_data = {
         "Meta Data": {},
         "Time Series (Daily)": {}
     }
 
-    result = process_time_series_data(incomplete_data)
+    result = process_time_series_data(empty_data)
     assert result is not None, "Function should return an empty DataFrame for empty time series data"
     assert result.empty, "Returned DataFrame should be empty"
 
